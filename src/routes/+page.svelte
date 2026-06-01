@@ -622,9 +622,7 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:title" content={PAGE_TITLE} />
   <meta name="twitter:description" content={PAGE_DESCRIPTION} />
-  <script type="application/ld+json">
-    {JSON.stringify(homeSchema)}
-  </script>
+  {@html `<script type="application/ld+json">${JSON.stringify(homeSchema).replace(/</g, "\\u003c")}</script>`}
 </svelte:head>
 
 <input
