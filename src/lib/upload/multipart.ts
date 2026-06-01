@@ -13,7 +13,7 @@ import {
 
 const MAX_PART_RETRIES = 3;
 // Concurrent part uploads. Kept moderate (below the browser's ~6-connection cap)
-// so a large file doesn't put too much data in flight at once — heavy concurrency
+// so a large file doesn't put too much data in flight at once - heavy concurrency
 // makes connection drops ("network connection was lost") more likely, notably on
 // Safari/WebKit.
 const PARALLELISM = 4;
@@ -110,7 +110,7 @@ function uploadSinglePart(
       cleanup();
       if (xhr.status >= 200 && xhr.status < 300) {
         // R2 (S3-compatible) returns the etag in the `ETag` response header,
-        // quoted. CompleteMultipartUpload requires it back verbatim — keep
+        // quoted. CompleteMultipartUpload requires it back verbatim - keep
         // the quotes. Readable cross-origin because the bucket CORS policy
         // exposes ETag.
         const etag =
@@ -242,7 +242,7 @@ export async function uploadEncryptedBlobMultipart(
       lastSampleT = now;
       lastSampleBytes = totalLoaded;
     }
-    // Throttle UI emits — onprogress can fire very frequently.
+    // Throttle UI emits - onprogress can fire very frequently.
     if (!force && totalLoaded < totalBytes && now - lastEmitT < 80) return;
     lastEmitT = now;
     const remaining = Math.max(0, totalBytes - totalLoaded);

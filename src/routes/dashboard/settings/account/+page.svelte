@@ -67,7 +67,7 @@
 
 <DividerRow
   title="Your data"
-  body="Export everything we have on you as JSON: your account, transfers, and recent sign-in activity. File contents aren't included — we never had them."
+  body="Export everything we have on you as JSON: your account, transfers, and recent sign-in activity. File contents aren't included - we never had them."
 >
   {#snippet actions()}
     <Button

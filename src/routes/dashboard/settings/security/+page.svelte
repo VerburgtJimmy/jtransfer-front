@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Security sub-route: passkeys. Passkeys are login-factor only — they
+  // Security sub-route: passkeys. Passkeys are login-factor only - they
   // don't participate in vault key derivation, so removing one has no
   // impact on a user's transfers or filenames.
 
@@ -173,7 +173,7 @@
     <Frame.Title class="text-base">Sign-in keys</Frame.Title>
     {#if showFraming}
       <Frame.Description class="mt-1 block">
-        Sign-in keys are tied to this site — they can't be used to sign in
+        Sign-in keys are tied to this site - they can't be used to sign in
         anywhere else. Email sign-in stays available either way.
       </Frame.Description>
     {/if}
@@ -208,7 +208,7 @@
       <div class="flex flex-col items-center gap-3 py-4 text-center">
         <p class="text-sm text-muted-foreground max-w-md text-pretty">
           Add a sign-in key to skip the email step next time. Sign-in keys are
-          tied to this site — they can't be used to sign in anywhere else.
+          tied to this site - they can't be used to sign in anywhere else.
           Email sign-in stays available either way.
         </p>
         <div class="w-full max-w-64">

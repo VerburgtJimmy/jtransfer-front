@@ -95,7 +95,7 @@ export async function readVaultKey(userId: string): Promise<CryptoKey | null> {
   return entry.key;
 }
 
-/** Drop the cached K_vault. Idempotent — safe to call when nothing is stored. */
+/** Drop the cached K_vault. Idempotent - safe to call when nothing is stored. */
 export async function clearVaultKey(): Promise<void> {
   await withStore("readwrite", (store) => store.delete(KEY_ID));
   notify({ unlocked: false, userId: null });

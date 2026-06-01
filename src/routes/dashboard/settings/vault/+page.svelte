@@ -162,7 +162,7 @@
       regenCopied = true;
       setTimeout(() => (regenCopied = false), 2000);
     } catch {
-      // ignore — user can copy manually
+      // ignore - user can copy manually
     }
   }
 
@@ -197,7 +197,7 @@
   <Frame.Header>
     <Frame.Title class="text-base">Change vault password</Frame.Title>
     <Frame.Description class="mt-1 block">
-      Your old recovery phrase still works after this — it's tied to a
+      Your old recovery phrase still works after this - it's tied to a
       different key inside the vault.
     </Frame.Description>
   </Frame.Header>
@@ -392,7 +392,7 @@
         </Button>
         {#if !regenRevealed}
           <p class="text-xs text-muted-foreground text-center">
-            Reveal the phrase first — we need you to look at it before confirming.
+            Reveal the phrase first - we need you to look at it before confirming.
           </p>
         {/if}
       </div>

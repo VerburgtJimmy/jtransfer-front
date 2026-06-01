@@ -56,7 +56,7 @@
   let usage = $state<UsageResponse | null>(null);
 
   // Single source of truth for row crypto state: re-lock on lock/expiry, and
-  // re-decrypt on (re)unlock — including unlocks triggered from the nav menu,
+  // re-decrypt on (re)unlock - including unlocks triggered from the nav menu,
   // not just the dashboard's own prompt.
   const unsubscribeVault = subscribeToVaultState(({ unlocked }) => {
     vaultUnlocked = unlocked;
@@ -241,7 +241,7 @@
       case "not_setup":
         return "Vault isn't set up yet. Finish setup first.";
       case "malformed":
-        return "We couldn't read your vault. Try again — contact support if this keeps happening.";
+        return "We couldn't read your vault. Try again - contact support if this keeps happening.";
     }
   }
 
@@ -254,7 +254,7 @@
       const raw = await unwrapTransferKey(auth.user.id, t.wrappedKey);
       if (!raw) {
         errorMessage =
-          "Couldn't rebuild the share link — unlock the vault and try again.";
+          "Couldn't rebuild the share link - unlock the vault and try again.";
         return;
       }
       const fragment = transferKeyToFragment(raw);
@@ -400,7 +400,7 @@
 </script>
 
 <svelte:head>
-  <title>Dashboard — Tessil</title>
+  <title>Dashboard - Tessil</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 
@@ -559,7 +559,7 @@
           </ul>
         </div>
 
-        <!-- Mobile stack (<sm) — actions live in the drawer instead of an overlay. -->
+        <!-- Mobile stack (<sm) - actions live in the drawer instead of an overlay. -->
         <ul class="space-y-3 sm:hidden">
           {#each transfers as t (t.id)}
             {@const status = statusOf(t)}
@@ -585,7 +585,7 @@
                   Created {shortDate(t.createdAt)} · Expires {relativeExpiry(t.expiresAt)}
                 </p>
                 {#if vs?.status === "locked"}
-                  <p class="text-xs text-muted-foreground">Vault locked — unlock to see name.</p>
+                  <p class="text-xs text-muted-foreground">Vault locked - unlock to see name.</p>
                 {:else if vs?.status === "unlocking"}
                   <p class="text-xs text-muted-foreground">Decrypting…</p>
                 {:else if vs?.status === "blind-error"}

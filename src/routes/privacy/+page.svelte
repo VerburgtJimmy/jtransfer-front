@@ -40,11 +40,11 @@
             <p class="text-muted-foreground">
               Your files are unreadable to us by design. They're encrypted in your
               browser before upload, and the decryption key lives in the share
-              link's URL fragment — the fragment never reaches our servers.
+              link's URL fragment - the fragment never reaches our servers.
             </p>
             <p class="text-muted-foreground">
               You can use Tessil anonymously or with an account. An account adds
-              management features for the transfers you create — it doesn't change
+              management features for the transfers you create - it doesn't change
               how files are encrypted.
             </p>
           </section>
@@ -93,7 +93,7 @@
             </ul>
             <p class="text-muted-foreground">
               Signing in doesn't change how files are encrypted. Your encryption key
-              never reaches our servers — signed in or not.
+              never reaches our servers - signed in or not.
             </p>
 
             <h3 class="text-lg font-medium text-foreground">2.3 Security and Audit Data</h3>
@@ -104,12 +104,11 @@
               <li>IP addresses (for rate limiting and abuse prevention)</li>
               <li>
                 Authentication audit events (sign-in requests, sign-in successes, session revocations, transfer
-                deletions, and account deletions) — stored for up to 90 days
+                deletions, and account deletions) - stored for up to 90 days
               </li>
               <li>Basic server request logs (retained for up to 7 days for security purposes)</li>
               <li>
-                Aggregated lifecycle counters per transfer (file count, total bytes, completion / expiry events) —
-                kept indefinitely with no user attribution and used only for service statistics
+                Aggregated lifecycle counters per transfer (file count, total bytes, completion / expiry events) -                 kept indefinitely with no user attribution and used only for service statistics
               </li>
             </ul>
 
@@ -207,7 +206,7 @@
               <strong>Self-service data export.</strong> You can download a JSON copy of your account record,
               recent sign-in activity, and the metadata of the transfers you own from
               <a href="/dashboard/settings" class="text-primary underline underline-offset-2">Settings → Your data</a>.
-              The export does not contain the contents of your files — they are encrypted in your browser with a
+              The export does not contain the contents of your files - they are encrypted in your browser with a
               key we never receive.
             </p>
             <p class="text-muted-foreground">
@@ -229,7 +228,7 @@
               <li>
                 <strong>Scaleway Transactional Email (TEM):</strong> Sends one-time sign-in links and
                 account-related notifications. Receives your email address and the message contents. EU-based
-                processor; used for transactional mail only — never marketing.
+                processor; used for transactional mail only - never marketing.
               </li>
             </ul>
             <p class="text-muted-foreground">

@@ -45,7 +45,7 @@
   const showTrail = $derived(!(trailingHidden && status === "idle"));
 
   // Exit transition for a removed row: slides right off the edge while fading,
-  // with a red flash peaking mid-way — a "swish away" on delete.
+  // with a red flash peaking mid-way - a "swish away" on delete.
   function swishAway(
     node: HTMLElement,
     { duration = 340 }: { duration?: number } = {},

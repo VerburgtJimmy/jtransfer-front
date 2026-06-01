@@ -44,7 +44,7 @@
             <ul class="list-disc list-inside text-muted-foreground space-y-1 ml-4">
               <li>Files, filenames, and the optional transfer title are encrypted in your browser with AES-256-GCM before upload</li>
               <li>The encryption key is generated client-side and lives in the URL fragment (the part after <code>#</code>)</li>
-              <li>Browsers don't send URL fragments to servers — the key stays in your browser</li>
+              <li>Browsers don't send URL fragments to servers - the key stays in your browser</li>
               <li>An optional transfer password gates server-side access, independent of the encryption key</li>
               <li>Transfers are deleted automatically when they expire</li>
             </ul>
@@ -53,7 +53,7 @@
           <section class="space-y-3">
             <h2 class="text-lg font-semibold text-foreground">Sharing links safely</h2>
             <p class="text-muted-foreground">
-              The decryption key lives in the URL fragment — the part after
+              The decryption key lives in the URL fragment - the part after
               <code>#</code>. Browsers never send fragments to servers; the key
               stays local.
             </p>
@@ -65,7 +65,7 @@
             </p>
             <ul class="list-disc list-inside text-muted-foreground space-y-1 ml-4">
               <li>Share links through trusted, private channels (Signal, encrypted email)</li>
-              <li>Set a transfer password for sensitive files — a second factor beyond the link</li>
+              <li>Set a transfer password for sensitive files - a second factor beyond the link</li>
               <li>Use a private/incognito window if you don't want the link in browser history</li>
               <li>Pick the shortest expiry that still works for your recipient</li>
             </ul>
@@ -95,7 +95,7 @@
             <ul class="list-disc list-inside text-muted-foreground space-y-1 ml-4">
               <li>HTTPS/TLS in transit</li>
               <li>All cryptography runs in your browser before bytes reach the network</li>
-              <li>Accounts are optional — anonymous transfers are first-class</li>
+              <li>Accounts are optional - anonymous transfers are first-class</li>
               <li>No third-party analytics or tracking SDKs</li>
             </ul>
           </section>
@@ -105,7 +105,7 @@
             <p class="text-muted-foreground">
               Sign in to manage your transfers from one place. Sign-in is
               optional. Accounts use magic-link email or a device-bound
-              passkey — no password to remember, lose, or breach.
+              passkey - no password to remember, lose, or breach.
               <strong>Accounts don't weaken the encryption model:</strong>
               file payloads stay end-to-end encrypted signed in or not, and
               the encryption key still lives only in the URL fragment.
@@ -116,7 +116,7 @@
               <li>Your account tier (currently free)</li>
               <li>A hashed session token for as long as you stay signed in</li>
               <li>The browser user-agent at sign-in time, for context in your sign-in email</li>
-              <li>Authentication events (sign-in requests, successes, sign-outs) — kept for 90 days then automatically deleted</li>
+              <li>Authentication events (sign-in requests, successes, sign-outs) - kept for 90 days then automatically deleted</li>
             </ul>
             <p class="text-muted-foreground">
               <strong>We don't store IP addresses.</strong> For sign-in events
@@ -135,7 +135,7 @@
             </p>
             <p class="text-muted-foreground">
               The magic-link token and your session cookie are never written
-              to the database in plaintext — both are SHA-256 hashed first.
+              to the database in plaintext - both are SHA-256 hashed first.
               Sign-in links expire after 15 minutes and work once.
             </p>
           </section>
@@ -151,8 +151,8 @@
             <p class="text-muted-foreground">
               <strong>Tessil will never ask you to share that code.</strong>
               We will never email, call, or message you to request a
-              sign-in code. If anyone — claiming to be Tessil support, a
-              friend, a delivery service — asks for the code, it's a phishing
+              sign-in code. If anyone - claiming to be Tessil support, a
+              friend, a delivery service - asks for the code, it's a phishing
               attempt. Don't share it.
             </p>
             <p class="text-muted-foreground">
@@ -166,13 +166,13 @@
             <p class="text-muted-foreground">
               If your device supports it, add a passkey to skip the email
               round-trip on sign-in. A passkey is a cryptographic key pair
-              generated and stored by your device's authenticator — Touch
+              generated and stored by your device's authenticator - Touch
               ID, Face ID, Windows Hello, a hardware security key, or a
               synced credential from your platform's password manager.
             </p>
             <p class="text-muted-foreground">
               <strong>Passkeys are bound to this site's domain.</strong> Your
-              browser only releases a Tessil passkey to Tessil — it
+              browser only releases a Tessil passkey to Tessil - it
               can't be used on a look-alike site, even one that copies our
               design pixel-for-pixel. The browser enforces this (the
               WebAuthn standard), not us. It's why passkeys resist phishing
@@ -182,13 +182,13 @@
               <li>The private key never leaves your device (or your platform's secure sync, if you opt in)</li>
               <li>We store only a public key, a credential identifier, and basic device info</li>
               <li>Add, rename, and remove passkeys from your account settings at any time</li>
-              <li>Passkeys don't replace email sign-in — both stay available, so a lost device doesn't lock you out</li>
+              <li>Passkeys don't replace email sign-in - both stay available, so a lost device doesn't lock you out</li>
             </ul>
             <p class="text-muted-foreground">
               Passkeys don't change the encryption model. File payloads stay
               end-to-end encrypted, the encryption key still lives only in
               the URL fragment, and signing in with a passkey only
-              authenticates you to Tessil — it doesn't give us access to
+              authenticates you to Tessil - it doesn't give us access to
               your transfers' contents.
             </p>
           </section>
@@ -199,7 +199,7 @@
               When you upload while signed in, your browser wraps the
               transfer's encryption key under a per-account vault key
               (<em>K<sub>vault</sub></em>) before sending the wrapped blob
-              to us. The vault key itself never touches our servers — it
+              to us. The vault key itself never touches our servers - it
               is derived in your browser from your vault password using
               Argon2id, and we only store the resulting wrapped blob.
             </p>
@@ -223,7 +223,7 @@
               filenames and rebuild share links for past transfers without
               keeping any of that information on our servers. Anyone with
               your account password (or your recovery phrase) gets that
-              same capability — the underlying file payload itself is
+              same capability - the underlying file payload itself is
               always end-to-end encrypted under a per-transfer key carried
               in the share link's URL fragment, separate from the vault.
             </p>
@@ -256,8 +256,7 @@
                 href="https://www.maxmind.com"
                 rel="noopener noreferrer"
                 class="text-primary underline underline-offset-2"
-              >maxmind.com</a>. The databases are loaded locally on our servers —
-              no per-request data is sent to MaxMind.
+              >maxmind.com</a>. The databases are loaded locally on our servers -               no per-request data is sent to MaxMind.
             </p>
           </section>
         </div>

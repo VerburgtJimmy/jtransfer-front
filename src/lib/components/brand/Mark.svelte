@@ -10,7 +10,7 @@
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 32 32"
+  viewBox="0 0 1024 1024"
   width={size}
   height={size}
   fill="currentColor"
@@ -20,8 +20,8 @@
   aria-hidden={title ? undefined : true}
 >
   {#if title}<title>{title}</title>{/if}
-  <rect x="5" y="5" width="10" height="10" />
-  <rect x="19" y="3" width="10" height="10" />
-  <rect x="5" y="17" width="10" height="10" />
-  <rect x="17" y="17" width="10" height="10" />
+  <rect x="537" y="537" width="400" height="400" rx="20" />
+  <rect x="598" y="26" width="400" height="400" rx="20" />
+  <rect x="87" y="537" width="400" height="400" rx="20" />
+  <path d="M87 107C87 95.9543 95.9543 87 107 87H467C478.046 87 487 95.9543 487 107V467C487 478.046 478.046 487 467 487H107C95.9543 487 87 478.046 87 467V107Z" />
 </svg>

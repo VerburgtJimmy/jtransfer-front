@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Outside-click does NOT close — drawer wraps editable form state. Explicit close only.
+  // Outside-click does NOT close - drawer wraps editable form state. Explicit close only.
   import { cn } from "$lib/utils";
   import IconXRegular from "phosphor-icons-svelte/IconXRegular.svelte";
   import type { Snippet } from "svelte";

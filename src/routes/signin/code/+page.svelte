@@ -82,14 +82,14 @@
 </script>
 
 <svelte:head>
-  <title>Your sign-in code — Tessil</title>
+  <title>Your sign-in code - Tessil</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 
 <PageLayout>
   <PageHeader
     title="Your sign-in code"
-    tagline="It looks like you opened the link on a different device. Type this code on the device where you started signing in — we won't sign you in here."
+    tagline="It looks like you opened the link on a different device. Type this code on the device where you started signing in - we won't sign you in here."
   />
 
   <Frame.Root>
@@ -150,7 +150,7 @@
 
           <Alert tone="info" title="What to do next">
             Switch back to the device where you started signing in and enter
-            this code. Closing this tab won't lose anything — the code stays
+            this code. Closing this tab won't lose anything - the code stays
             valid on the other device until it's used or expires.
           </Alert>
         </div>

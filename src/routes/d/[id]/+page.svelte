@@ -324,7 +324,7 @@
 </script>
 
 <svelte:head>
-  <title>Secure download — Tessil</title>
+  <title>Secure download - Tessil</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 
@@ -534,7 +534,7 @@
 </section>
 
 <style>
-  /* Featured reveal band — shorter & full-width on mobile, corner crop on desktop. */
+  /* Featured reveal band - shorter & full-width on mobile, corner crop on desktop. */
   .featured-reveal {
     --reveal-top: calc(100% - 13rem);
     --reveal-left: 0px;

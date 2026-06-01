@@ -70,7 +70,7 @@
   ondrop={handleDrop}
   ondragover={handleDragOver}
   ondragleave={handleDragLeave}
-  aria-label={compact ? "Add more files" : "Choose files to upload — opens file picker"}
+  aria-label={compact ? "Add more files" : "Choose files to upload - opens file picker"}
   class={cn(
     "w-full border-2 border-dashed rounded-md transition-[border-color,background-color] duration-200 ease-out cursor-pointer focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     compact ? "p-4" : "p-10",

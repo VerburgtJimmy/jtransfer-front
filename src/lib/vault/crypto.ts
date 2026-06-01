@@ -62,7 +62,7 @@ export async function deriveKekFromPassword(
   return out as Uint8Array;
 }
 
-/** Derives from raw entropy (not the words) — independent of wordlist edits, locale, whitespace. */
+/** Derives from raw entropy (not the words) - independent of wordlist edits, locale, whitespace. */
 export async function deriveKekFromPhrase(
   mnemonic: string,
   salt: Uint8Array,
