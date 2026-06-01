@@ -33,7 +33,7 @@ export interface PasswordStrength {
   score: 0 | 1 | 2 | 3 | 4;
   /** Combined gate: both length and score must pass. */
   acceptable: boolean;
-  /** Localised feedback from zxcvbn — surfaced inline under the input. */
+  /** Localised feedback from zxcvbn - surfaced inline under the input. */
   warning: string;
   suggestions: string[];
 }

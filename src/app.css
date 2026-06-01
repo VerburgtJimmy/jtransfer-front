@@ -52,10 +52,10 @@
 }
 
 :root {
-  /* Light palette — vibrant cobalt primary on warm-neutral surfaces.
+  /* Light palette - vibrant cobalt primary on warm-neutral surfaces.
      The brand colour pops against the restrained palette: warm
      off-white background, pure-white cards one step above.
-     v2 radius anchor: 0.5rem (was 0.625rem) — slightly tighter
+     v2 radius anchor: 0.5rem (was 0.625rem) - slightly tighter
      baseline that cascades through every Tailwind-derived radius. */
   --radius: 0.5rem;
   --background: #fafaf7;
@@ -98,7 +98,7 @@
 }
 
 .dark {
-  /* Dark palette — neutral cool near-black so the cobalt primary
+  /* Dark palette - neutral cool near-black so the cobalt primary
      feels at home rather than colour-clashing. Background → card →
      accent forms the three-step elevation. */
   --background: #0e0f12;

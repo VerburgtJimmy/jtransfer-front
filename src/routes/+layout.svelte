@@ -151,12 +151,9 @@
   }
 </script>
 
-<svelte:head>
-  <title>Tessil</title>
-  <meta property="og:site_name" content="Tessil" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-</svelte:head>
+<!-- og:site_name / og:type / twitter:card / the default title all live statically
+     in app.html; duplicating them here added a second tag on every page (and a
+     second <title> on SSR'd routes like /compare). -->
 {#if isApp}
   <ModeWatcher />
 {/if}
@@ -177,7 +174,7 @@
       <a
         href="/"
         class="inline-flex text-sm hover:opacity-80 transition-opacity duration-200 ease-out focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded"
-        aria-label="Tessil — home"
+        aria-label="Tessil - home"
       >
         <Wordmark layout="horizontal" markSize={22} />
       </a>

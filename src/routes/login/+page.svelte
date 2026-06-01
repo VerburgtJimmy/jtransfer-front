@@ -127,14 +127,14 @@
 </script>
 
 <svelte:head>
-  <title>Sign in — Tessil</title>
+  <title>Sign in - Tessil</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 
 <PageLayout>
   <PageHeader
     title="Sign in"
-    tagline="We'll email you a one-time link. First time here? Your account is created on first sign-in — no password needed."
+    tagline="We'll email you a one-time link. First time here? Your account is created on first sign-in - no password needed."
   />
 
   <Frame.Root>

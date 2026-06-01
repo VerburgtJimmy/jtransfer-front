@@ -56,19 +56,19 @@
     "2 GiB per transfer",
     "50× the monthly upload volume (100 GB)",
     "Expiry up to 30 days",
-    "Per-account caps — fair on shared networks",
+    "Per-account caps - fair on shared networks",
     "Backs the project directly",
   ];
 </script>
 
 <svelte:head>
-  <title>Pricing — Tessil</title>
+  <title>Pricing - Tessil</title>
   <meta
     name="description"
-    content="Tessil pricing — Free for routine encrypted file transfer, Pro for higher limits. Built and run by one person."
+    content="Tessil pricing - Free for routine encrypted file transfer, Pro for higher limits. Built and run by one person."
   />
   <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Pricing — Tessil" />
+  <meta property="og:title" content="Pricing - Tessil" />
   <meta
     property="og:description"
     content="Free is generous. Pro keeps the project alive."
@@ -194,7 +194,7 @@
               class="text-foreground underline underline-offset-2 hover:no-underline"
               rel="noopener"
             >Polar</a>
-            is our Merchant of Record — they handle VAT and invoicing under
+            is our Merchant of Record - they handle VAT and invoicing under
             their own entity. Polar processes the payment end-to-end; we never
             see your card.
           </p>
@@ -205,7 +205,7 @@
             surprise charges.
           </p>
           <p>
-            Privacy and security features stay on Free — passkeys,
+            Privacy and security features stay on Free - passkeys,
             password-protected transfers, end-to-end encryption. Pro is limit
             uplifts, not a paywall on safety.
           </p>

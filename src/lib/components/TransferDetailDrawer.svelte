@@ -151,7 +151,7 @@
       const raw = await unwrapTransferKey(userId, transfer.wrappedKey);
       if (!raw) {
         recoverError =
-          "Couldn't rebuild the share link — the vault couldn't decrypt this transfer.";
+          "Couldn't rebuild the share link - the vault couldn't decrypt this transfer.";
         return;
       }
       const fragment = transferKeyToFragment(raw);
@@ -251,7 +251,7 @@
           <TextInput
             id="transfer-title-input"
             bind:value={titleInput}
-            placeholder="Optional — give this transfer a memorable name"
+            placeholder="Optional - give this transfer a memorable name"
             maxlength={TITLE_MAX + 32}
             disabled={titleSaving}
           />
@@ -262,7 +262,7 @@
           </p>
           {#if titleOverLimit}
             <p class="text-xs text-destructive-foreground">
-              {titleInput.length} / {TITLE_MAX} — too long. Trim it down to save.
+              {titleInput.length} / {TITLE_MAX} - too long. Trim it down to save.
             </p>
           {/if}
           {#if titleError}
@@ -379,7 +379,7 @@
         {:else if canRecover && transfer.wrappedKey}
           <p class="text-xs text-muted-foreground">
             Rebuild the original share link from your vault. Nothing is sent
-            to our servers — the key is derived in your browser.
+            to our servers - the key is derived in your browser.
           </p>
           <Button
             variant="secondary"

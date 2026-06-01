@@ -151,7 +151,7 @@
 </script>
 
 <svelte:head>
-  <title>Set up your vault — Tessil</title>
+  <title>Set up your vault - Tessil</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 
@@ -159,7 +159,7 @@
   <PageHeader
     title={step === "password" ? "Set up your vault" : "Save your recovery phrase"}
     tagline={step === "password"
-      ? "Your vault password unlocks the encryption key that protects everything you upload. Pick something long and memorable — we can't reset it."
+      ? "Your vault password unlocks the encryption key that protects everything you upload. Pick something long and memorable - we can't reset it."
       : "Write these 12 words down somewhere safe. They're the only way back in if you forget your password."}
   />
 
@@ -225,7 +225,7 @@
           {/if}
 
           <div class="rounded-md border border-border bg-muted/30 p-4 text-sm text-muted-foreground space-y-1">
-            <p class="font-medium text-foreground">Pick wisely — there's no reset link.</p>
+            <p class="font-medium text-foreground">Pick wisely - there's no reset link.</p>
             <p>
               Your password never leaves this browser. We can't email you a
               reset because we never see it. If you forget it, the recovery
@@ -246,7 +246,7 @@
         <div class="space-y-5">
           <Alert tone="warning" title="Save this phrase before continuing">
             We won't show it again. Anyone with these 12 words can unlock your
-            vault — keep them somewhere only you can reach.
+            vault - keep them somewhere only you can reach.
           </Alert>
 
           <div class="rounded-md border border-border bg-muted/30 p-4 relative">
@@ -301,7 +301,7 @@
           </Button>
           {#if !phraseRevealed}
             <p class="text-xs text-muted-foreground text-center">
-              Reveal the phrase first — we need you to look at it before you continue.
+              Reveal the phrase first - we need you to look at it before you continue.
             </p>
           {/if}
         </div>

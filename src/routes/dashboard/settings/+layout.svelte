@@ -1,6 +1,6 @@
 <script lang="ts">
   // Settings sidebar shell. The sidebar collapses to a horizontal tab row on
-  // narrow screens — anchor tags keep server-rendered links / browser
+  // narrow screens - anchor tags keep server-rendered links / browser
   // back-forward sane (each tab is its own route).
 
   import { page } from "$app/state";
@@ -31,7 +31,7 @@
 </script>
 
 <svelte:head>
-  <title>Settings — Tessil</title>
+  <title>Settings - Tessil</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 </svelte:head>
 

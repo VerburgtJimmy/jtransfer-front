@@ -40,9 +40,9 @@
   import { onMount } from "svelte";
 
   const SITE_URL = "https://tessil.app";
-  const PAGE_TITLE = "Tessil — Send anything. We see nothing.";
+  const PAGE_TITLE = "Tessil - Send anything. We see nothing.";
   const PAGE_DESCRIPTION =
-    "End-to-end encrypted file transfer. Your browser encrypts before upload — we never see your files or the key.";
+    "End-to-end encrypted file transfer. Your browser encrypts before upload - we never see your files or the key.";
 
   const homeSchema = {
     "@context": "https://schema.org",
@@ -370,7 +370,7 @@
         const unlocked = await ensureVaultUnlocked();
         if (!unlocked) {
           uploadStore.setError(
-            "Vault stays locked — sign in or unlock to keep this transfer in your dashboard.",
+            "Vault stays locked - sign in or unlock to keep this transfer in your dashboard.",
           );
           return;
         }
@@ -509,7 +509,7 @@
       uploadStore.setShareUrl(shareUrl);
     } catch (error) {
       if ((error as DOMException)?.name === "AbortError") {
-        // User cancelled — clean up the partial transfer and return to the
+        // User cancelled - clean up the partial transfer and return to the
         // settings view with the same files still queued.
         if (createdTransferId)
           api.abortTransfer(createdTransferId).catch(() => {});
@@ -861,7 +861,7 @@
                     />
                     {#if uploadStore.title.length > TITLE_MAX}
                       <p class="text-xs text-warning-foreground">
-                        {uploadStore.title.length} / {TITLE_MAX} — too long.
+                        {uploadStore.title.length} / {TITLE_MAX} - too long.
                       </p>
                     {/if}
                   </div>
@@ -982,7 +982,7 @@
           reaches our server.
         </p>
         <p class="text-sm text-muted-foreground/80 leading-relaxed">
-          Drop a file in the panel — or anywhere on this page.
+          Drop a file in the panel - or anywhere on this page.
         </p>
       </div>
     </div>
@@ -1033,7 +1033,7 @@
         Tessil is an end-to-end encrypted file transfer service.
         Files are scrambled in your browser before they leave your
         device. The decryption key lives in the URL fragment of the
-        share link — the part after <code>#</code> that browsers
+        share link, the part after <code>#</code> that browsers
         don't send to servers. We never see your files, your
         filenames, or your keys.
       </p>
@@ -1045,9 +1045,74 @@
         <a href="/security" class="text-primary underline underline-offset-2">security page</a>.
       </p>
       <p>
-        Built and run by one person, and free to use. If Tessil saves you a
-        headache, you can support the project — the link's in the footer below.
+        New to encrypted transfer? See how Tessil compares to
+        <a href="/compare" class="text-primary underline underline-offset-2">WeTransfer, Proton Drive, and other tools</a>.
       </p>
+      <p>
+        Built and run by one person, and free to use. If Tessil saves you a
+        headache, you can support the project. The link's in the footer below.
+      </p>
+    </section>
+
+    <section class="mt-14 pt-10 border-t border-border/60">
+      <h2 class="text-base font-semibold text-foreground mb-4">Frequently asked questions</h2>
+      <div class="divide-y divide-border/60 border-y border-border/60 text-sm">
+        <details class="group py-4">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-foreground font-medium list-none [&::-webkit-details-marker]:hidden">
+            Is Tessil really end-to-end encrypted?
+            <span class="text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-45 shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted-foreground leading-relaxed">
+            Yes. Your files are encrypted in your browser with AES-GCM before they upload, and the decryption key lives in the share link, never on our servers. We can't read your files, your filenames, or your keys.
+          </p>
+        </details>
+        <details class="group py-4">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-foreground font-medium list-none [&::-webkit-details-marker]:hidden">
+            Do I need an account to send files?
+            <span class="text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-45 shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted-foreground leading-relaxed">
+            No. You can send and receive files anonymously. A free account is optional and just adds a dashboard to manage the transfers you create. It doesn't change how files are encrypted.
+          </p>
+        </details>
+        <details class="group py-4">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-foreground font-medium list-none [&::-webkit-details-marker]:hidden">
+            How is Tessil different from WeTransfer or Dropbox?
+            <span class="text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-45 shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted-foreground leading-relaxed">
+            Those services can read what you upload. Tessil can't, because encryption happens in your browser before anything is sent. Tessil is also open source, EU-hosted, and shows no ads.
+            <a href="/compare" class="text-primary underline underline-offset-2">See the full comparison</a>.
+          </p>
+        </details>
+        <details class="group py-4">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-foreground font-medium list-none [&::-webkit-details-marker]:hidden">
+            How large can the files be?
+            <span class="text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-45 shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted-foreground leading-relaxed">
+            Large files are supported through multi-part uploads, so big transfers stay reliable even on slower connections. Signed-in transfers allow larger sizes than anonymous ones.
+          </p>
+        </details>
+        <details class="group py-4">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-foreground font-medium list-none [&::-webkit-details-marker]:hidden">
+            Is Tessil free?
+            <span class="text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-45 shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted-foreground leading-relaxed">
+            Yes, completely free, with no ads and no selling of data. Tessil is open source under the AGPL-3.0 licence, so anyone can audit exactly how it handles encryption.
+          </p>
+        </details>
+        <details class="group py-4">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 text-foreground font-medium list-none [&::-webkit-details-marker]:hidden">
+            How long do transfers last?
+            <span class="text-muted-foreground transition-transform duration-200 ease-out group-open:rotate-45 shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted-foreground leading-relaxed">
+            Transfers expire automatically based on the time limit and download count you choose. Once a transfer expires, the encrypted data is deleted.
+          </p>
+        </details>
+      </div>
     </section>
 
     <SiteFooter current="home" />
@@ -1122,7 +1187,7 @@
 </Modal>
 
 <style>
-  /* Minimal scrollbar — neutral grayscale, never brand colour. */
+  /* Minimal scrollbar - neutral grayscale, never brand colour. */
   :global(.file-list-scroll) {
     scrollbar-width: thin;
     scrollbar-color: rgb(0 0 0 / 0.18) transparent;
@@ -1148,7 +1213,7 @@
     transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Featured reveal band — shorter & full-width on mobile, corner crop on desktop. */
+  /* Featured reveal band - shorter & full-width on mobile, corner crop on desktop. */
   .featured-reveal {
     --reveal-top: calc(100% - 13rem);
     --reveal-left: 0px;

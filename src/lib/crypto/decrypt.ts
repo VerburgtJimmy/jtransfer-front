@@ -64,7 +64,7 @@ export interface DownloadProgress {
 /**
  * Streams the encrypted blob from R2 with real bytes-received progress (so big
  * files don't look frozen), reports a smoothed speed + ETA, then decrypts.
- * Download maps to 0–90%, decrypt to 90–100% — the download dominates wall-clock.
+ * Download maps to 0–90%, decrypt to 90–100% - the download dominates wall-clock.
  */
 export async function downloadAndDecrypt(
   downloadUrl: string,
@@ -111,7 +111,7 @@ export async function downloadAndDecrypt(
       lastSampleBytes = received;
     }
 
-    // Throttle UI emits — reads fire very frequently on a fast connection.
+    // Throttle UI emits - reads fire very frequently on a fast connection.
     if (onProgress && total > 0 && (now - lastEmitT >= 80 || received >= total)) {
       lastEmitT = now;
       onProgress({

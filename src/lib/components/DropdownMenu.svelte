@@ -96,7 +96,7 @@
 
   $effect(() => {
     if (!open) return;
-    // Mouse-open focuses the menu container (no item highlighted — Safari paints
+    // Mouse-open focuses the menu container (no item highlighted - Safari paints
     // :focus-visible on a programmatically focused item); keyboard-open focuses
     // the first item so arrow navigation starts there.
     queueMicrotask(openedViaKeyboard ? focusFirstItem : focusMenu);

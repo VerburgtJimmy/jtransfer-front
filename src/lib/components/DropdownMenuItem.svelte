@@ -22,7 +22,7 @@
 
   const base =
     "w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm text-left transition-colors duration-150 ease-out hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none";
-  // `:focus` is intentionally NOT styled — the dropdown auto-focuses its
+  // `:focus` is intentionally NOT styled - the dropdown auto-focuses its
   // first item on open, which would otherwise paint that item as
   // permanently highlighted. `:focus-visible` keeps keyboard navigation
   // visible without firing on programmatic focus.
