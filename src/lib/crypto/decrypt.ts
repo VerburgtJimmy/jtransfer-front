@@ -1,4 +1,5 @@
 import { base64ToIv } from './key';
+import { isStreamingFormat, streamingDecrypt } from './streaming';
 
 /** Strips right-padding zero bytes added by encryptString. */
 export async function decryptString(
@@ -130,6 +131,38 @@ export async function downloadAndDecrypt(
   }
 
   onProgress?.({ percent: 90, bytesPerSecond: null, etaSeconds: null });
+
+  // TSL1 (streaming) ciphertext is self-describing via its magic header and
+  // carries base_iv internally, so ivBase64 is ignored for it. Legacy
+  // whole-file ciphertext uses ivBase64. Phase 1 still buffers the ciphertext
+  // above; streaming the plaintext to disk is Phase 2.
+  if (isStreamingFormat(encryptedData)) {
+    const src = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(encryptedData);
+        controller.close();
+      },
+    });
+    const plainReader = streamingDecrypt(src, encryptedData.length, key).getReader();
+    const chunks: Uint8Array[] = [];
+    let plainSize = 0;
+    for (;;) {
+      const { done, value } = await plainReader.read();
+      if (done) break;
+      if (value) {
+        chunks.push(value);
+        plainSize += value.length;
+      }
+    }
+    const plain = new Uint8Array(plainSize);
+    let off = 0;
+    for (const c of chunks) {
+      plain.set(c, off);
+      off += c.length;
+    }
+    onProgress?.({ percent: 100, bytesPerSecond: null, etaSeconds: null });
+    return new Blob([plain]);
+  }
 
   return decryptFile(encryptedData.buffer as ArrayBuffer, ivBase64, key, (p) => {
     onProgress?.({

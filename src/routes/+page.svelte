@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { api, ApiError } from "$lib/api/client";
-  import { uploadEncryptedBlobMultipart } from "$lib/upload/multipart";
+  import { uploadEncryptedStreamMultipart } from "$lib/upload/multipart";
   import Alert from "$lib/components/Alert.svelte";
   import Button from "$lib/components/Button.svelte";
   import CircularProgress from "$lib/components/CircularProgress.svelte";
@@ -16,10 +16,10 @@
   import TextInput from "$lib/components/TextInput.svelte";
   import { MAX_TOTAL_UPLOAD_SIZE } from "$lib/config/limits";
   import {
-    encryptFile,
     encryptFilename,
     encryptString,
   } from "$lib/crypto/encrypt";
+  import { encryptFileStream } from "$lib/crypto/streaming";
   import { exportKey, generateKey, wrapKey } from "$lib/crypto/key";
   import { auth } from "$lib/stores/auth.svelte";
   import { uploadStore } from "$lib/stores/upload.svelte";
@@ -424,37 +424,37 @@
             key,
           );
 
-          const { encryptedBlob, iv: fileIv } = await encryptFile(
-            file,
-            key,
-            (p) => uploadStore.setFileStatus(i, "encrypting", p * 0.15),
-          );
+          // Streaming encryption: the ciphertext is produced lazily as Parts are
+          // read off the stream, so memory stays bounded to a few Parts
+          // regardless of file size, and the upload starts immediately instead
+          // of after a whole-file encrypt. Encryption now overlaps upload, so
+          // there is no separate encrypt progress phase.
+          const encryptor = encryptFileStream(file, key);
 
           if (controller.signal.aborted)
             throw new DOMException("aborted", "AbortError");
 
-          uploadStore.setFileStatus(i, "encrypting", 15);
-          uploadStore.setFileStatus(i, "uploading", 15);
+          uploadStore.setFileStatus(i, "uploading", 0);
 
           const initResponse = await api.initMultipartUpload({
             transferId: transfer.transferId,
             contentType: file.type || "application/octet-stream",
             encryptedName,
             encryptedNameIv: nameIv,
-            fileIv,
-            size: encryptedBlob.size,
+            fileIv: encryptor.ivB64,
+            size: encryptor.size,
           });
 
-          await uploadEncryptedBlobMultipart({
+          await uploadEncryptedStreamMultipart({
             uploadId: initResponse.uploadId,
             fileId: initResponse.fileId,
             transferId: transfer.transferId,
             r2Key: initResponse.r2Key,
-            encryptedBlob,
+            source: encryptor.stream,
             partUrls: initResponse.partUrls,
             signal: controller.signal,
             onProgress: (p) => {
-              uploadStore.setFileStatus(i, "uploading", 15 + p.percent * 0.85);
+              uploadStore.setFileStatus(i, "uploading", p.percent);
               // Throttle the displayed speed/ETA to ~1s so the readout stays
               // steady instead of flickering on every progress event.
               const now = performance.now();

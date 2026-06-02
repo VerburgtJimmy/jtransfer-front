@@ -11,7 +11,18 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler"
-	}
+	},
+	// Test files run under `bun test` (which provides `bun:test` types natively),
+	// so they are excluded from svelte-check / tsc to avoid an unresolved
+	// `bun:test` module error. The base excludes are replicated here because a
+	// child `exclude` replaces the inherited one rather than merging.
+	"exclude": [
+		"node_modules/**",
+		"src/service-worker.ts",
+		"src/service-worker/**",
+		"src/**/*.test.ts",
+		"src/**/*.spec.ts"
+	]
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
 	//
