@@ -79,7 +79,7 @@ export const comparisons: Comparison[] = [
       { label: "Ads & third-party tracking", tessil: TESSIL.tracking, competitor: "Ads on the free tier" },
       { label: "Price", tessil: TESSIL.price, competitor: "Free tier + paid plans" },
       { label: "Link expiry & download limits", tessil: TESSIL.expiry, competitor: true },
-      { label: "Password protection", tessil: TESSIL.password, competitor: "Paid plans only" },
+      { label: "Password protection", tessil: TESSIL.password, competitor: true },
     ],
     verdict: [
       "If you just want to lob a file at someone and privacy isn't a concern, WeTransfer is fine and frictionless. If you'd rather the service physically can't read what you send - for client work, documents, anything sensitive - Tessil gives you that without giving up the simple link-based flow.",
