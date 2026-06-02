@@ -2,14 +2,14 @@
 
 ## Supported Versions
 
-Security fixes are applied to the latest deployed version of JTransfer Frontend.
+Security fixes are applied to the latest deployed version of Tessil.
 
 ## Reporting a Vulnerability
 
-If you discover a vulnerability, report it privately:
+If you discover a vulnerability, please report it privately:
 
-- Email: `security@jimmyverburgt.com`
-- Subject: `JTransfer Security Report`
+- Email: `security@tessil.app`
+- Subject: `Tessil Security Report`
 
 Please include:
 
@@ -17,7 +17,7 @@ Please include:
 - Clear reproduction steps
 - Expected vs actual behavior
 - Potential impact
-- Proof-of-concept (if available)
+- Proof of concept (if available)
 
 ## Response Targets
 

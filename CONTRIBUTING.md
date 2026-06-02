@@ -1,11 +1,11 @@
-# Contributing to JTransfer Frontend
+# Contributing to Tessil Web
 
-Thank you for your interest in contributing to JTransfer Frontend! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Tessil Web! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/jtransfer-front.git`
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/tessil-web.git`
 3. Create a new branch: `git checkout -b feature/your-feature-name`
 4. Install dependencies: `bun install`
 
