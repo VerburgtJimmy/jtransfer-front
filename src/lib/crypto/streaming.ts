@@ -59,6 +59,18 @@ export function framedSize(plaintextSize: number, chunkSize: number = DEFAULT_CH
   return HEADER_SIZE + plaintextSize + TAG_SIZE * chunkCount(plaintextSize, chunkSize);
 }
 
+/**
+ * Plaintext size for a framed ciphertext size (the inverse of framedSize). Used
+ * to set Content-Length on the streamed download so the browser shows progress.
+ */
+export function plaintextSize(ciphertextSize: number, chunkSize: number = DEFAULT_CHUNK_SIZE): number {
+  const bodyLen = ciphertextSize - HEADER_SIZE;
+  if (bodyLen < TAG_SIZE) return 0;
+  const wireChunk = chunkSize + TAG_SIZE;
+  const n = Math.floor((bodyLen - 1) / wireChunk) + 1;
+  return bodyLen - n * TAG_SIZE;
+}
+
 /** True if these leading bytes carry the TSL1 magic (dispatch legacy vs streaming on download). */
 export function isStreamingFormat(firstBytes: Uint8Array): boolean {
   if (firstBytes.length < 4) return false;
@@ -306,4 +318,70 @@ export function streamingDecrypt(
       return reader.cancel(reason);
     },
   });
+}
+
+// ─── Random-access primitives (for parallel ranged downloads) ───────────────
+// Because chunks are fixed-stride and each is independently authenticated, any
+// chunk can be fetched and decrypted in isolation given its index. These power
+// the parallel ranged download path; the sequential streamingDecrypt above is
+// the small-file / fallback path.
+
+export interface StreamHeader {
+  version: number;
+  baseIv: Uint8Array;
+  chunkSize: number;
+}
+
+/** Parses and validates the 20-byte TSL1 header. */
+export function parseStreamHeader(header: Uint8Array): StreamHeader {
+  if (header.length < HEADER_SIZE) throw new Error("streaming: short header");
+  if (!isStreamingFormat(header) || header[4] !== VERSION) {
+    throw new Error("streaming: bad magic or version");
+  }
+  const baseIv = header.slice(8, 16);
+  const chunkSize = new DataView(header.buffer, header.byteOffset, header.byteLength).getUint32(16, true);
+  if (chunkSize < 1 || chunkSize > MAX_CHUNK_SIZE) {
+    throw new Error("streaming: invalid chunk size");
+  }
+  return { version: header[4], baseIv, chunkSize };
+}
+
+export interface ChunkLayout {
+  /** Total number of chunks. */
+  total: number;
+  /** On-wire size of every chunk except the last (plaintext chunk + tag). */
+  wireChunk: number;
+  /** On-wire size of the final chunk (<= wireChunk). */
+  lastWireSize: number;
+}
+
+/** Computes the chunk layout from the framed ciphertext size and chunk size. */
+export function chunkLayout(ciphertextSize: number, chunkSize: number): ChunkLayout {
+  const bodyLen = ciphertextSize - HEADER_SIZE;
+  if (bodyLen < TAG_SIZE) throw new Error("streaming: ciphertext body too small");
+  const wireChunk = chunkSize + TAG_SIZE;
+  const total = Math.floor((bodyLen - 1) / wireChunk) + 1;
+  const lastWireSize = bodyLen - (total - 1) * wireChunk;
+  return { total, wireChunk, lastWireSize };
+}
+
+/** Byte offset (from the start of the ciphertext) of chunk `index` on the wire. */
+export function chunkByteOffset(index: number, wireChunk: number): number {
+  return HEADER_SIZE + index * wireChunk;
+}
+
+/** Decrypts a single chunk in isolation. Enables parallel / out-of-order decryption. */
+export async function decryptChunk(
+  key: CryptoKey,
+  baseIv: Uint8Array,
+  index: number,
+  isFinal: boolean,
+  wire: Uint8Array<ArrayBuffer>,
+): Promise<Uint8Array> {
+  const plain = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: ivFor(baseIv, index), additionalData: aadFor(index, isFinal) },
+    key,
+    wire,
+  );
+  return new Uint8Array(plain);
 }

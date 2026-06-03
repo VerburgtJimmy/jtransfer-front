@@ -4,7 +4,12 @@ import {
   streamingDecrypt,
   encryptFileStream,
   framedSize,
+  plaintextSize,
   isStreamingFormat,
+  parseStreamHeader,
+  chunkLayout,
+  chunkByteOffset,
+  decryptChunk,
   HEADER_SIZE,
   DEFAULT_CHUNK_SIZE,
 } from "./streaming";
@@ -199,6 +204,19 @@ describe("TSL1 header validation", () => {
   });
 });
 
+describe("plaintextSize (inverse of framedSize)", () => {
+  for (const size of [0, 1, CHUNK, 5 * CHUNK + 3, 17 * CHUNK + 9]) {
+    test(`recovers ${size} from its framed size at chunk ${CHUNK}`, () => {
+      expect(plaintextSize(framedSize(size, CHUNK), CHUNK)).toBe(size);
+    });
+  }
+  for (const size of [0, 1, DEFAULT_CHUNK_SIZE, DEFAULT_CHUNK_SIZE + 1, 3 * DEFAULT_CHUNK_SIZE + 777]) {
+    test(`recovers ${size} at the default chunk size`, () => {
+      expect(plaintextSize(framedSize(size))).toBe(size);
+    });
+  }
+});
+
 describe("encryptFileStream (upload integration)", () => {
   test("round-trips a File, with an exact size and an 8-byte base IV", async () => {
     const key = await genKey();
@@ -220,5 +238,38 @@ describe("encryptFileStream (upload integration)", () => {
     const out = await collect(streamingDecrypt(bytesToStream(cipher, 333_333), cipher.length, key));
     expect(out.length).toBe(data.length);
     expect(Buffer.from(out).equals(Buffer.from(data))).toBe(true);
+  });
+});
+
+describe("random-access decrypt (parallel-download primitives)", () => {
+  test("decrypts each chunk independently and reassembles", async () => {
+    const key = await genKey();
+    const data = patterned(5 * CHUNK + 7); // 6 chunks (5 full + a partial final)
+    const cipher = await encryptBytes(data, key);
+
+    const { baseIv, chunkSize } = parseStreamHeader(cipher.slice(0, HEADER_SIZE));
+    expect(chunkSize).toBe(CHUNK);
+    const { total, wireChunk, lastWireSize } = chunkLayout(cipher.length, chunkSize);
+    expect(total).toBe(6);
+
+    // Decrypt in a deliberately shuffled order to prove independence.
+    const plains: Uint8Array[] = new Array(total);
+    for (const i of [3, 0, 5, 1, 4, 2]) {
+      const off = chunkByteOffset(i, wireChunk);
+      const size = i < total - 1 ? wireChunk : lastWireSize;
+      plains[i] = await decryptChunk(key, baseIv, i, i === total - 1, cipher.subarray(off, off + size));
+    }
+    const out: number[] = [];
+    for (const p of plains) out.push(...p);
+    expect(out).toEqual([...data]);
+  });
+
+  test("a chunk decrypted at the wrong index fails (AAD binds position)", async () => {
+    const key = await genKey();
+    const cipher = await encryptBytes(patterned(3 * CHUNK), key);
+    const { baseIv, chunkSize } = parseStreamHeader(cipher.slice(0, HEADER_SIZE));
+    const { wireChunk } = chunkLayout(cipher.length, chunkSize);
+    const wire0 = cipher.subarray(chunkByteOffset(0, wireChunk), chunkByteOffset(0, wireChunk) + wireChunk);
+    await expect(decryptChunk(key, baseIv, 1, false, wire0)).rejects.toThrow();
   });
 });
