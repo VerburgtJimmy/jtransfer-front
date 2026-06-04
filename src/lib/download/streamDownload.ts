@@ -239,21 +239,41 @@ export async function streamingDownloadToDisk(opts: StreamDownloadOptions): Prom
   const id = crypto.randomUUID();
   const size = plaintextSize(ciphertextSize);
   const channel = new MessageChannel();
+  let resolveAck: (() => void) | null = null;
+  let resolveStarted: (() => void) | null = null;
+  channel.port1.onmessage = (ev) => {
+    const type = ev.data?.type;
+    if (type === "ack") resolveAck?.();
+    else if (type === "started") resolveStarted?.();
+  };
 
   // Register the download with the worker and wait for its ack before triggering
   // the iframe, so the worker has the stream ready when the request arrives.
   await new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error("download worker did not respond")), 5000);
-    channel.port1.onmessage = (ev) => {
-      if (ev.data?.type === "ack") {
-        clearTimeout(timer);
-        resolve();
-      }
+    resolveAck = () => {
+      clearTimeout(timer);
+      resolve();
     };
     worker.postMessage(
       { type: "init", id, filename, mimeType: mimeType ?? "application/octet-stream", size },
       [channel.port2],
     );
+  });
+
+  // Watch for the worker to actually begin serving the download (its fetch
+  // handler posts "started"). If the trigger is blocked (e.g. CSP) or otherwise
+  // fails, this never arrives, we time out, and the caller falls back to the
+  // buffered path instead of silently "succeeding" with no file.
+  const started = new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new Error("download did not start (worker trigger blocked)")),
+      4000,
+    );
+    resolveStarted = () => {
+      clearTimeout(timer);
+      resolve();
+    };
   });
 
   // Trigger the native download via a hidden iframe inside the worker's scope.
@@ -281,6 +301,7 @@ export async function streamingDownloadToDisk(opts: StreamDownloadOptions): Prom
   };
 
   try {
+    await started; // bail to the buffered fallback if the worker never engaged
     await pumpParallel(downloadUrl, key, ciphertextSize, feed, signal);
     channel.port1.postMessage({ type: "end" });
     onProgress?.(1);

@@ -33,6 +33,7 @@ self.addEventListener("message", (event) => {
 
   downloads.set(data.id, {
     stream,
+    port,
     meta: { filename: data.filename, mimeType: data.mimeType, size: data.size },
   });
 
@@ -70,6 +71,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   downloads.delete(id); // one-shot
+
+  // Tell the page the download genuinely started, so it can distinguish a real
+  // start from a blocked/failed trigger and only then feed the stream.
+  try {
+    entry.port.postMessage({ type: "started" });
+  } catch (_e) {
+    /* port closed */
+  }
 
   const filename = entry.meta.filename || "download";
   const headers = new Headers({
