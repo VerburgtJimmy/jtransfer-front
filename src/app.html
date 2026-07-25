@@ -4,9 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Only invariant tags live here. Title, description, robots, canonical and
-         the per-page og/twitter pairs come from $lib/components/Seo.svelte, which
-         renders inside %sveltekit.head% so prerendered HTML carries them. A
-         static title tag here would win on document order and mask every route. -->
+         the per-page og/twitter pairs come from $lib/components/Seo.svelte, so
+         prerendered HTML carries them. Never add a static title tag here: it
+         would win on document order and mask every route. Never write the
+         SvelteKit head placeholder token in this comment either, because only
+         the first occurrence in the file is substituted, and it would consume
+         the real one below. -->
     <meta
       name="theme-color"
       media="(prefers-color-scheme: light)"
