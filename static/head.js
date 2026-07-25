@@ -1,0 +1,107 @@
+// Route-aware document metadata for the static SPA shell.
+// External rather than inline in app.html so the CSP needs no 'unsafe-inline'.
+// Keep in sync with src/routes and static/sitemap.xml.
+
+(() => {
+  const siteUrl = "https://tessil.app";
+  const path =
+    window.location.pathname === "/"
+      ? "/"
+      : window.location.pathname.replace(/\/+$/, "");
+  const isTransferRoute = path.startsWith("/d/");
+
+  const pageMeta = {
+    "/": {
+      title: "Tessil - Send anything. We see nothing.",
+      description:
+        "End-to-end encrypted file transfer. Your browser encrypts before upload, so we never see your files or the key.",
+    },
+    "/privacy": {
+      title: "Privacy Policy - Tessil",
+      description:
+        "What data Tessil handles, how long, and your GDPR rights. End-to-end encrypted file transfer.",
+    },
+    "/terms": {
+      title: "Terms of Service - Tessil",
+      description:
+        "Tessil terms of service: usage, limits, acceptable use, legal compliance. End-to-end encrypted file transfer.",
+    },
+    "/abuse": {
+      title: "Report Abuse - Tessil",
+      description:
+        "Report illegal or abusive transfers on Tessil. Submit a link for review.",
+    },
+    "/security": {
+      title: "Security Overview - Tessil",
+      description:
+        "How Tessil's encryption works, what we can and cannot see, and how to report vulnerabilities.",
+    },
+    "/compare": {
+      title: "Tessil vs other encrypted file transfer tools",
+      description:
+        "How Tessil compares to WeTransfer, Proton Drive, Tresorit Send, and Wormhole for private, end-to-end encrypted file transfer.",
+    },
+    "/compare/wetransfer-alternative": {
+      title: "Encrypted WeTransfer alternative - Tessil",
+      description:
+        "Looking for a private, encrypted WeTransfer alternative? Tessil encrypts files in your browser and never sees your files or the key. Open source, EU-hosted, free.",
+    },
+    "/compare/proton-drive-alternative": {
+      title:
+        "Proton Drive alternative for quick encrypted transfers - Tessil",
+      description:
+        "Proton Drive is a full encrypted cloud. Tessil is a focused, no-account, end-to-end encrypted file transfer - share a link, the key never leaves your browser. Open source, EU-hosted.",
+    },
+    "/compare/tresorit-send-alternative": {
+      title: "Open-source Tresorit Send alternative - Tessil",
+      description:
+        "A free, open-source alternative to Tresorit Send. End-to-end encrypted file transfer, the key never reaches the server, EU-hosted, no account required.",
+    },
+    "/compare/wormhole-alternative": {
+      title: "Wormhole (wormhole.app) alternative - Tessil",
+      description:
+        "Like Wormhole, Tessil keeps the decryption key in the link so we can't read your files. Unlike Wormhole, Tessil is open source, EU-hosted, and adds optional accounts.",
+    },
+  };
+
+  const fallback = pageMeta["/"];
+  const current = pageMeta[path] ?? fallback;
+  document.title = current.title;
+
+  const setMeta = (attrName, attrValue, value) => {
+    let tag = document.head.querySelector(
+      `meta[${attrName}="${attrValue}"]`,
+    );
+    if (!tag) {
+      tag = document.createElement("meta");
+      tag.setAttribute(attrName, attrValue);
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute("content", value);
+  };
+
+  setMeta("name", "description", current.description);
+  setMeta("property", "og:title", current.title);
+  setMeta("property", "og:description", current.description);
+  setMeta("name", "twitter:title", current.title);
+  setMeta("name", "twitter:description", current.description);
+
+  const canonicalPath = path === "/" ? "/" : path;
+  const canonicalUrl = `${siteUrl}${canonicalPath}`;
+  setMeta("property", "og:url", canonicalUrl);
+
+  let canonicalTag = document.head.querySelector('link[rel="canonical"]');
+  if (!canonicalTag) {
+    canonicalTag = document.createElement("link");
+    canonicalTag.setAttribute("rel", "canonical");
+    document.head.appendChild(canonicalTag);
+  }
+  canonicalTag.setAttribute("href", canonicalUrl);
+
+  let robots =
+    "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1";
+  if (isTransferRoute) {
+    robots = "noindex, nofollow, noarchive, nosnippet";
+  }
+  setMeta("name", "robots", robots);
+})();
