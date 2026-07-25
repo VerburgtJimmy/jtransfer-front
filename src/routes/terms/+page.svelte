@@ -2,22 +2,15 @@
   import * as Frame from "$lib/components/frame";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
 </script>
 
-<svelte:head>
-  <title>Terms of Service - Tessil</title>
-  <meta
-    name="description"
-    content="Tessil terms of service: usage, limits, acceptable use, legal compliance. End-to-end encrypted file transfer."
-  />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Terms of Service - Tessil" />
-  <meta
-    property="og:description"
-    content="Terms of service for using Tessil end-to-end encrypted file transfer."
-  />
-</svelte:head>
+<Seo
+  title="Terms of Service - Tessil"
+  description="Tessil terms of service: usage, limits, acceptable use, legal compliance. End-to-end encrypted file transfer."
+  path="/terms"
+/>
 
 <PageLayout width="3xl">
   <PageHeader

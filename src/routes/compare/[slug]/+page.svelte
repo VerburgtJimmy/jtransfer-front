@@ -1,5 +1,6 @@
 <script lang="ts">
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
   import Button from "$lib/components/Button.svelte";
   import IconCheckRegular from "phosphor-icons-svelte/IconCheckRegular.svelte";
@@ -40,11 +41,13 @@
   );
 </script>
 
+<Seo
+  title={c.metaTitle}
+  description={c.metaDescription}
+  path={`/compare/${c.slug}`}
+/>
+
 <svelte:head>
-  <!-- Title / description / OG / canonical / robots are set site-wide by the
-       app.html pageMeta script (compare routes are registered there), so we
-       keep a single consistent set of head tags. Here we only add the
-       structured data that script can't provide. -->
   {@html `<script type="application/ld+json">${jsonLd}</script>`}
 </svelte:head>
 

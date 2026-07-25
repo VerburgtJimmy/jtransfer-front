@@ -1,11 +1,16 @@
 <script lang="ts">
   import PageLayout from "$lib/components/PageLayout.svelte";
   import PageHeader from "$lib/components/PageHeader.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
   import { comparisons } from "$lib/compare/comparisons";
-  // Title / description / OG / canonical are set site-wide by the app.html
-  // pageMeta script ("/compare" is registered there).
 </script>
+
+<Seo
+  title="Tessil vs other encrypted file transfer tools"
+  description="How Tessil compares to WeTransfer, Boomerang, Proton Drive, Tresorit Send, and Wormhole for private, end-to-end encrypted file transfer."
+  path="/compare"
+/>
 
 <PageLayout width="5xl">
   <PageHeader

@@ -8,6 +8,7 @@
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
   import PasswordInput from "$lib/components/PasswordInput.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import Textarea from "$lib/components/Textarea.svelte";
   import TransferDetailDrawer, {
@@ -399,10 +400,7 @@
   );
 </script>
 
-<svelte:head>
-  <title>Dashboard - Tessil</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-</svelte:head>
+<Seo title="Dashboard - Tessil" robots="noindex" />
 
 <PageLayout width="5xl">
   {#if !auth.loaded}

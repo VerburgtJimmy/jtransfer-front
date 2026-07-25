@@ -6,8 +6,11 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
+		// The SPA fallback must NOT be index.html: the homepage prerenders to
+		// index.html, and the adapter would overwrite it with the empty shell.
+		// nginx serves this as the last try_files candidate.
 		adapter: adapter({
-			fallback: 'index.html'
+			fallback: '200.html'
 		}),
 
 		// Script policy only; every other directive is the nginx header
