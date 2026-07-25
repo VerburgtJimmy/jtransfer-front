@@ -5,6 +5,7 @@
   import * as Frame from "$lib/components/frame";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import IconCopySimpleRegular from "phosphor-icons-svelte/IconCopySimpleRegular.svelte";
   import IconCheckRegular from "phosphor-icons-svelte/IconCheckRegular.svelte";
   import { onMount } from "svelte";
@@ -81,10 +82,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Your sign-in code - Tessil</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-</svelte:head>
+<Seo title="Your sign-in code - Tessil" robots="noindex" />
 
 <PageLayout>
   <PageHeader

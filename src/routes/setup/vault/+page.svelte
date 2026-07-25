@@ -7,6 +7,7 @@
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
   import PasswordInput from "$lib/components/PasswordInput.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import { auth } from "$lib/stores/auth.svelte";
   import { setupVault } from "$lib/vault/client";
@@ -150,10 +151,7 @@
   const strengthBarWidth = $derived(`${((strength.score + 1) / 5) * 100}%`);
 </script>
 
-<svelte:head>
-  <title>Set up your vault - Tessil</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-</svelte:head>
+<Seo title="Set up your vault - Tessil" robots="noindex" />
 
 <PageLayout>
   <PageHeader

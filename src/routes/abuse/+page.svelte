@@ -4,6 +4,7 @@
   import * as Frame from "$lib/components/frame";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
   import TextInput from "$lib/components/TextInput.svelte";
   import Textarea from "$lib/components/Textarea.svelte";
@@ -37,19 +38,11 @@
   }
 </script>
 
-<svelte:head>
-  <title>Report Abuse - Tessil</title>
-  <meta
-    name="description"
-    content="Report illegal or abusive transfers on Tessil. Submit a link for review."
-  />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Report Abuse - Tessil" />
-  <meta
-    property="og:description"
-    content="Report illegal or abusive transfers on Tessil. End-to-end encrypted file transfer."
-  />
-</svelte:head>
+<Seo
+  title="Report Abuse - Tessil"
+  description="Report illegal or abusive transfers on Tessil. Submit a link for review."
+  path="/abuse"
+/>
 
 <PageLayout width="3xl">
   <PageHeader

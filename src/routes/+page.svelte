@@ -10,11 +10,13 @@
   import Modal from "$lib/components/Modal.svelte";
   import PasswordInput from "$lib/components/PasswordInput.svelte";
   import SegmentedControl from "$lib/components/SegmentedControl.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import Textarea from "$lib/components/Textarea.svelte";
   import TextInput from "$lib/components/TextInput.svelte";
   import { MAX_TOTAL_UPLOAD_SIZE } from "$lib/config/limits";
+  import { SITE_URL } from "$lib/config/site";
   import {
     encryptFilename,
     encryptString,
@@ -39,7 +41,6 @@
   import IconWarningRegular from "phosphor-icons-svelte/IconWarningRegular.svelte";
   import { onMount } from "svelte";
 
-  const SITE_URL = "https://tessil.app";
   const PAGE_TITLE = "Tessil - Send anything. We see nothing.";
   const PAGE_DESCRIPTION =
     "End-to-end encrypted file transfer. Your browser encrypts before upload - we never see your files or the key.";
@@ -609,19 +610,9 @@
   }
 </script>
 
+<Seo title={PAGE_TITLE} description={PAGE_DESCRIPTION} path="/" />
+
 <svelte:head>
-  <title>{PAGE_TITLE}</title>
-  <meta name="description" content={PAGE_DESCRIPTION} />
-  <meta
-    name="robots"
-    content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-  />
-  <meta property="og:title" content={PAGE_TITLE} />
-  <meta property="og:description" content={PAGE_DESCRIPTION} />
-  <meta property="og:url" content={SITE_URL} />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:title" content={PAGE_TITLE} />
-  <meta name="twitter:description" content={PAGE_DESCRIPTION} />
   {@html `<script type="application/ld+json">${JSON.stringify(homeSchema).replace(/</g, "\\u003c")}</script>`}
 </svelte:head>
 
@@ -1034,6 +1025,12 @@
         share link, the part after <code>#</code> that browsers
         don't send to servers. We never see your files, your
         filenames, or your keys.
+      </p>
+      <p>
+        You don't have to take that on faith.
+        <a href="/verify" class="text-primary underline underline-offset-2">Verify it yourself</a>
+        walks through four checks you can run against this site in about two
+        minutes, using the developer tools already in your browser.
       </p>
       <p>
         Anonymous transfers expire in hours; signed-in transfers

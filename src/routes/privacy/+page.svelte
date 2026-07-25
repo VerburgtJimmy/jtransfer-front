@@ -2,22 +2,15 @@
   import * as Frame from "$lib/components/frame";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
 </script>
 
-<svelte:head>
-  <title>Privacy Policy - Tessil</title>
-  <meta
-    name="description"
-    content="What data Tessil handles, how long, and your GDPR rights. End-to-end encrypted file transfer."
-  />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Privacy Policy - Tessil" />
-  <meta
-    property="og:description"
-    content="Tessil privacy policy for end-to-end encrypted file transfer."
-  />
-</svelte:head>
+<Seo
+  title="Privacy Policy - Tessil"
+  description="What data Tessil handles, how long, and your GDPR rights. End-to-end encrypted file transfer."
+  path="/privacy"
+/>
 
 <PageLayout width="3xl">
   <PageHeader

@@ -2,22 +2,15 @@
   import * as Frame from "$lib/components/frame";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
 </script>
 
-<svelte:head>
-  <title>Security Overview - Tessil</title>
-  <meta
-    name="description"
-    content="How Tessil's encryption works, what we can and cannot see, and how to report vulnerabilities."
-  />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Security Overview - Tessil" />
-  <meta
-    property="og:description"
-    content="How end-to-end encryption works on Tessil, what we can and cannot access, and how to report a vulnerability."
-  />
-</svelte:head>
+<Seo
+  title="Security Overview - Tessil"
+  description="How Tessil's encryption works, what we can and cannot see, and how to report vulnerabilities."
+  path="/security"
+/>
 
 <PageLayout width="3xl">
   <PageHeader
@@ -36,6 +29,15 @@
               Tessil is an end-to-end encrypted file transfer service. This
               page is the security model: what we can and cannot access, how keys
               are handled, and how to report a vulnerability.
+            </p>
+            <p class="text-muted-foreground">
+              This page describes what we do. If you would rather check than
+              read, <a
+                href="/verify"
+                class="text-primary underline underline-offset-2"
+                >verify it yourself</a
+              > walks through four checks you can run against the live site in about
+              two minutes.
             </p>
           </section>
 

@@ -8,6 +8,7 @@
   import DefinitionRow from "$lib/components/DefinitionRow.svelte";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import { auth } from "$lib/stores/auth.svelte";
   import { cn } from "$lib/utils";
@@ -30,10 +31,7 @@
   });
 </script>
 
-<svelte:head>
-  <title>Settings - Tessil</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-</svelte:head>
+<Seo title="Settings - Tessil" robots="noindex" />
 
 <PageLayout width="3xl">
   {#if !auth.loaded}

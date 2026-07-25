@@ -10,6 +10,7 @@
   import * as Frame from "$lib/components/frame";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import { auth } from "$lib/stores/auth.svelte";
   import { onMount } from "svelte";
@@ -56,10 +57,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Signing you in - Tessil</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-</svelte:head>
+<Seo title="Signing you in - Tessil" robots="noindex" />
 
 <PageLayout>
   <PageHeader

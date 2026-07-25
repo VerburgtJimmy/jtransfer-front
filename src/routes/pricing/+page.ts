@@ -1,8 +1,6 @@
-import { redirect } from "@sveltejs/kit";
-
-// Pro / pricing is disabled for v1 (Free-only launch - see launch strategy).
-// The page component is kept in git for v1.5; this redirect makes the route
-// inert in the meantime so any old links land on home.
-export const load = () => {
-  redirect(307, "/");
-};
+// Static content page: render to real HTML at build time so crawlers and link
+// unfurlers see it. The v1 redirect to "/" is gone: with Pro deferred the page
+// now answers "is this free?" rather than selling a tier, so it earns its URL.
+// No auth or API calls remain (the Polar checkout was removed with the rewrite).
+export const ssr = true;
+export const prerender = true;
