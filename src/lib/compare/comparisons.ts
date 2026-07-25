@@ -101,6 +101,51 @@ export const comparisons: Comparison[] = [
     ],
   },
   {
+    slug: "boomerang-alternative",
+    competitor: "Boomerang",
+    shortName: "Boomerang",
+    metaTitle: "Encrypted, open-source Boomerang alternative - Tessil",
+    metaDescription:
+      "Boomerang is a clean, ad-free transfer tool, but it isn't end-to-end encrypted. Tessil encrypts files in your browser, keeps the key out of the server, and is open source. EU-hosted, free.",
+    heading: "Tessil vs Boomerang",
+    summary:
+      "Like Boomerang: no-login, ad-free, EU-hosted. Unlike Boomerang: truly end-to-end encrypted and open source.",
+    intro: [
+      "Boomerang (bmrng.me) is a clean, ad-free file transfer service from one of WeTransfer's co-founders. It needs no login, keeps your data in the EU, and explicitly doesn't run ads or train AI on your files. For privacy-minded sending it's a real step up from the typical big-name tools.",
+      "Where it stops short is encryption. Boomerang describes files as encrypted in transit and at rest, which means Boomerang holds the keys and can in principle read what you upload. That's ordinary secure file sharing, not end-to-end encryption.",
+      "Tessil closes that gap. Files are encrypted in your browser before upload and the key lives in the share link's URL fragment, so we only ever store ciphertext we can't read. The whole thing is open source under AGPL-3.0, so the claim is auditable rather than asserted.",
+    ],
+    rows: [
+      { label: "End-to-end encrypted", tessil: TESSIL.e2e, competitor: false },
+      { label: "Key never reaches the server", tessil: TESSIL.keyServer, competitor: false },
+      { label: "Works without an account", tessil: TESSIL.noAccount, competitor: true },
+      { label: "Open source", tessil: TESSIL.openSource, competitor: false },
+      { label: "Hosting / jurisdiction", tessil: TESSIL.hosting, competitor: "EU data (on Cloudflare)" },
+      { label: "Ads & third-party tracking", tessil: TESSIL.tracking, competitor: "None (ad-free)" },
+      { label: "Price", tessil: TESSIL.price, competitor: "Free + paid (~EUR 6.99/mo)" },
+      { label: "Link expiry & download limits", tessil: TESSIL.expiry, competitor: true },
+      { label: "Password protection", tessil: TESSIL.password, competitor: "Paid only" },
+    ],
+    verdict: [
+      "Boomerang is one of the nicer mainstream transfer tools: no ads, no AI training, EU-hosted, no login. If your concern is 'I don't want an ad-funded platform mining my uploads,' it does that job well.",
+      "Tessil is for the next step: when you want the service to be technically unable to read your files, not just promising not to. Browser-side encryption plus open-source code is the difference between trusting a policy and verifying it.",
+    ],
+    faq: [
+      {
+        q: "Is Boomerang end-to-end encrypted?",
+        a: "Based on its public description, no. Boomerang encrypts files in transit and at rest, which means it controls the keys and can access your files. Tessil encrypts in your browser and never receives the key, so it only stores ciphertext it can't read. Encryption claims change, so verify on each provider's site.",
+      },
+      {
+        q: "What does Boomerang cost compared to Tessil?",
+        a: "Boomerang has a free tier and a paid plan around EUR 6.99/month for more storage and larger files. Tessil is currently free. Check Boomerang's site for up-to-date pricing.",
+      },
+      {
+        q: "Is Tessil also made in the Netherlands?",
+        a: "Yes. Tessil is built in the Netherlands and hosted entirely in the EU (Germany and the Netherlands). Like Boomerang it needs no account to send, and it adds browser-side end-to-end encryption and fully open-source code.",
+      },
+    ],
+  },
+  {
     slug: "proton-drive-alternative",
     competitor: "Proton Drive",
     shortName: "Proton Drive",
