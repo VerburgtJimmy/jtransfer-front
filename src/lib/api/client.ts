@@ -137,6 +137,17 @@ export interface VerifyCodeResponse {
   ok: true;
 }
 
+/**
+ * Result of redeeming a magic-link token. `signed_in` means the session cookie
+ * is set. `code_issued` means the link was opened on a different device than it
+ * was requested from, so the 6-digit code must be typed on the original device.
+ */
+export interface VerifyLinkResponse {
+  action: "signed_in" | "code_issued";
+  code?: string;
+  expiresIn?: number;
+}
+
 export interface PasskeySummary {
   id: string;
   nickname: string | null;
@@ -416,6 +427,14 @@ class ApiClient {
     return this.request("/api/auth/verify-code", {
       method: "POST",
       body: JSON.stringify({ code }),
+    });
+  }
+
+  /** Redeems a magic-link token read from the /signin/verify URL fragment. */
+  async verifyMagicLink(token: string): Promise<VerifyLinkResponse> {
+    return this.request("/api/auth/verify", {
+      method: "POST",
+      body: JSON.stringify({ token }),
     });
   }
 
