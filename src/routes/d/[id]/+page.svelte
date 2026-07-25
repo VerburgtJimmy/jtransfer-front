@@ -5,6 +5,7 @@
   import CircularProgress from "$lib/components/CircularProgress.svelte";
   import FileRow from "$lib/components/FileRow.svelte";
   import PasswordInput from "$lib/components/PasswordInput.svelte";
+  import Seo from "$lib/components/Seo.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import { decryptFilename, decryptString, downloadAndDecrypt } from "$lib/crypto/decrypt";
   import { importKey, isWrappedKey, unwrapKey } from "$lib/crypto/key";
@@ -13,8 +14,11 @@
   import IconCheckRegular from "phosphor-icons-svelte/IconCheckRegular.svelte";
   import IconDownloadRegular from "phosphor-icons-svelte/IconDownloadRegular.svelte";
   import IconLockRegular from "phosphor-icons-svelte/IconLockRegular.svelte";
+  import IconUploadRegular from "phosphor-icons-svelte/IconUploadRegular.svelte";
   import IconWarningRegular from "phosphor-icons-svelte/IconWarningRegular.svelte";
   import { onMount } from "svelte";
+  import { cubicOut } from "svelte/easing";
+  import { fly } from "svelte/transition";
 
   type PageStatus = "loading" | "password_required" | "ready" | "error";
   type FileDownloadStatus = "idle" | "downloading" | "complete" | "error";
@@ -354,10 +358,7 @@
   );
 </script>
 
-<svelte:head>
-  <title>Secure download - Tessil</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-</svelte:head>
+<Seo title="Secure download - Tessil" robots="noindex" />
 
 <!-- -mt-14 pulls the image behind the sticky nav so the glass effect sees through to artwork. -->
 <section class="relative min-h-screen -mt-14 overflow-hidden">
@@ -519,14 +520,42 @@
         <p class="text-base text-muted-foreground leading-relaxed">
           {pageTagline}
         </p>
-        <p class="text-sm">
-          <a
-            href="/"
-            class="text-primary underline underline-offset-4"
+        {#if allComplete}
+          <!-- Surfaced only once the recipient has watched their own browser
+               decrypt the file. That is the moment the claim is credible. -->
+          <div
+            class="glass-panel px-5 py-4 space-y-3 text-left sm:text-right"
+            in:fly={{ y: 8, duration: 220, easing: cubicOut }}
           >
-            Want to send something back? →
-          </a>
-        </p>
+            <p class="text-sm text-foreground leading-relaxed">
+              That decryption happened on your device. We stored the encrypted
+              version and never held the key.
+            </p>
+            <div class="flex sm:justify-end">
+              <Button href="/" fullWidth={false}>
+                <IconUploadRegular class="size-4" />
+                Send your own files
+              </Button>
+            </div>
+            <p class="text-xs">
+              <a
+                href="/verify"
+                class="text-muted-foreground hover:text-foreground transition-colors duration-200 ease-out underline underline-offset-4"
+              >
+                Check that claim yourself →
+              </a>
+            </p>
+          </div>
+        {:else}
+          <p class="text-sm">
+            <a
+              href="/"
+              class="text-primary underline underline-offset-4"
+            >
+              Want to send something back? →
+            </a>
+          </p>
+        {/if}
       </div>
     </div>
   </div>

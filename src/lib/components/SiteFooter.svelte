@@ -5,6 +5,8 @@
   type Current =
     | "home"
     | "compare"
+    | "verify"
+    | "pricing"
     | "privacy"
     | "terms"
     | "security"
@@ -34,6 +36,8 @@
   const links: { key: Current; href: string; label: string }[] = [
     { key: "home", href: "/", label: "Home" },
     { key: "compare", href: "/compare", label: "Compare" },
+    { key: "verify", href: "/verify", label: "Verify" },
+    { key: "pricing", href: "/pricing", label: "Pricing" },
     { key: "privacy", href: "/privacy", label: "Privacy" },
     { key: "terms", href: "/terms", label: "Terms" },
     { key: "security", href: "/security", label: "Security" },
