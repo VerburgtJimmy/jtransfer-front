@@ -8,6 +8,7 @@
   import Spinner from "$lib/components/Spinner.svelte";
   import { decryptFilename, decryptString, downloadAndDecrypt } from "$lib/crypto/decrypt";
   import { importKey, isWrappedKey, unwrapKey } from "$lib/crypto/key";
+  import { canStreamToDisk, streamingDownloadToDisk } from "$lib/download/streamDownload";
   import { formatEta, formatSize, formatSpeed } from "$lib/utils";
   import IconCheckRegular from "phosphor-icons-svelte/IconCheckRegular.svelte";
   import IconDownloadRegular from "phosphor-icons-svelte/IconDownloadRegular.svelte";
@@ -17,6 +18,11 @@
 
   type PageStatus = "loading" | "password_required" | "ready" | "error";
   type FileDownloadStatus = "idle" | "downloading" | "complete" | "error";
+
+  // Above this size, stream the download to disk via the service worker (bounded
+  // memory, native download, Safari-friendly). Smaller files use the snappier
+  // in-page buffered download.
+  const STREAM_THRESHOLD = 50 * 1024 * 1024;
 
   interface DecryptedFileInfo {
     id: string;
@@ -236,6 +242,31 @@
         file.id,
         accessToken ?? undefined,
       );
+
+      // Large files: stream straight to disk via the service worker so we never
+      // buffer the whole file in memory (and Safari gets a native download). Any
+      // failure (no/blocked worker, or a legacy non-TSL1 object) falls through
+      // to the buffered path below.
+      if (canStreamToDisk() && file.size >= STREAM_THRESHOLD) {
+        try {
+          await streamingDownloadToDisk({
+            downloadUrl,
+            key,
+            ciphertextSize: file.size,
+            filename: file.name,
+            mimeType: file.mimeType,
+            onProgress: (frac) => {
+              files[index].progress = Math.round(frac * 100);
+            },
+          });
+          files[index].status = "complete";
+          files[index].progress = 100;
+          return;
+        } catch (err) {
+          console.warn("[download] streaming failed; falling back to buffered:", err);
+          files[index].progress = 0;
+        }
+      }
 
       const decryptedBlob = await downloadAndDecrypt(
         downloadUrl,

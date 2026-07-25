@@ -1,4 +1,10 @@
-// Multipart upload orchestrator. Slices, uploads in parallel to R2, retries, aborts on hard failure.
+// Multipart upload orchestrator. Streams TSL1 ciphertext into R2 Parts in
+// parallel, retries, aborts on hard failure.
+//
+// The ciphertext arrives as a ReadableStream (from streaming encryption), so we
+// never hold the whole file in memory: Parts are read off the stream in order,
+// each exactly its server-assigned contentLength, then uploaded with bounded
+// concurrency. Peak memory is roughly PARALLELISM Parts.
 //
 // Part PUTs use XMLHttpRequest (not fetch) so we get upload.onprogress events:
 // fetch exposes no upload progress, which made big files look frozen between
@@ -41,7 +47,8 @@ interface MultipartUploadInput {
   fileId: string;
   transferId: string;
   r2Key: string;
-  encryptedBlob: Blob;
+  /** Ciphertext stream (TSL1). Read in order into Parts; never fully buffered. */
+  source: ReadableStream<Uint8Array>;
   partUrls: InitMultipartUploadPart[];
   onProgress?: (progress: MultipartProgress) => void;
   /** AbortSignal for user-initiated cancel; rejects all in-flight Parts. */
@@ -175,56 +182,26 @@ async function uploadPartWithRetry(
   throw lastError instanceof Error ? lastError : new Error("Part upload failed");
 }
 
-async function runWithConcurrency<T, R>(
-  items: T[],
-  concurrency: number,
-  worker: (item: T, index: number) => Promise<R>,
-): Promise<R[]> {
-  const results: R[] = new Array(items.length);
-  let nextIndex = 0;
-  const inFlight: Promise<void>[] = [];
-
-  async function pickNext(): Promise<void> {
-    const i = nextIndex++;
-    if (i >= items.length) return;
-    results[i] = await worker(items[i]!, i);
-    await pickNext();
-  }
-
-  for (let i = 0; i < Math.min(concurrency, items.length); i++) {
-    inFlight.push(pickNext());
-  }
-  await Promise.all(inFlight);
-  return results;
-}
-
-/** Aborts cleanly on terminal failure. Caller handles init-multipart and one-shot semantics. */
-export async function uploadEncryptedBlobMultipart(
+/**
+ * Reads the ciphertext stream into Parts (in order, each exactly its
+ * contentLength) and uploads them with bounded concurrency. Aborts cleanly on
+ * terminal failure. Caller handles init-multipart and one-shot semantics.
+ */
+export async function uploadEncryptedStreamMultipart(
   input: MultipartUploadInput,
 ): Promise<MultipartUploadResult> {
-  const { uploadId, fileId, transferId, encryptedBlob, partUrls, onProgress, signal } = input;
+  const { uploadId, fileId, transferId, source, partUrls, onProgress, signal } = input;
 
-  let offset = 0;
-  const tasks: PartTask[] = partUrls.map((p) => {
-    const body = encryptedBlob.slice(offset, offset + p.contentLength);
-    offset += p.contentLength;
-    return {
-      partNumber: p.partNumber,
-      url: p.url,
-      contentLength: p.contentLength,
-      body,
-    };
-  });
-
-  // Linked to caller signal so a user cancel propagates to in-flight Parts.
+  // Linked to caller signal so a user cancel propagates to in-flight Parts and
+  // the source reader.
   const controller = new AbortController();
   const onCallerAbort = () => controller.abort();
   signal?.addEventListener("abort", onCallerAbort, { once: true });
 
-  const totalBytes = tasks.reduce((sum, t) => sum + t.contentLength, 0);
+  const totalBytes = partUrls.reduce((sum, p) => sum + p.contentLength, 0);
   // Per-part uploaded bytes; aggregated across the parallel parts for a smooth
   // total. Indexed by task position so a retry can reset just its own slot.
-  const partLoaded = new Array<number>(tasks.length).fill(0);
+  const partLoaded = new Array<number>(partUrls.length).fill(0);
 
   // Speed/ETA tracking (EMA over wall-clock).
   let emaBps = 0;
@@ -255,33 +232,104 @@ export async function uploadEncryptedBlobMultipart(
     });
   }
 
+  // Sequential reader over the ciphertext stream. Only this loop reads, so the
+  // single reader is never touched concurrently; uploads run in parallel.
+  const reader = source.getReader();
+  let leftover: Uint8Array<ArrayBuffer> = new Uint8Array(0);
+  let streamDone = false;
+  async function readExact(n: number): Promise<Uint8Array<ArrayBuffer>> {
+    while (leftover.length < n && !streamDone) {
+      const { done, value } = await reader.read();
+      if (done) {
+        streamDone = true;
+        break;
+      }
+      if (value && value.length) {
+        const merged = new Uint8Array(leftover.length + value.length);
+        merged.set(leftover, 0);
+        merged.set(value, leftover.length);
+        leftover = merged;
+      }
+    }
+    const take = Math.min(n, leftover.length);
+    const out = new Uint8Array(take);
+    out.set(leftover.subarray(0, take));
+    leftover = leftover.slice(take);
+    return out;
+  }
+
+  const results: CompleteMultipartUploadPart[] = new Array(partUrls.length);
+  const inFlight = new Set<Promise<void>>();
+  let firstError: unknown = null;
+
   try {
-    const results = await runWithConcurrency(tasks, PARALLELISM, async (task, idx) => {
-      const result = await uploadPartWithRetry(
-        task,
-        (loaded) => {
-          partLoaded[idx] = Math.min(loaded, task.contentLength);
-          report();
+    for (let i = 0; i < partUrls.length; i++) {
+      if (firstError) break;
+      if (controller.signal.aborted) throw new DOMException("aborted", "AbortError");
+
+      const p = partUrls[i]!;
+      const bytes = await readExact(p.contentLength);
+      if (bytes.length !== p.contentLength) {
+        throw new Error("Ciphertext stream ended before all Parts were filled");
+      }
+      const task: PartTask = {
+        partNumber: p.partNumber,
+        url: p.url,
+        contentLength: p.contentLength,
+        body: new Blob([bytes]),
+      };
+      const idx = i;
+
+      const job = (async () => {
+        const result = await uploadPartWithRetry(
+          task,
+          (loaded) => {
+            partLoaded[idx] = Math.min(loaded, task.contentLength);
+            report();
+          },
+          controller.signal,
+        );
+        partLoaded[idx] = task.contentLength;
+        report();
+        results[idx] = { partNumber: task.partNumber, etag: result.etag };
+      })();
+
+      // Wrap so a rejection never goes unhandled; capture the first error and
+      // abort the rest. `tracked` is referenced in its own callbacks, which run
+      // after it is assigned.
+      const tracked: Promise<void> = job.then(
+        () => {
+          inFlight.delete(tracked);
         },
-        controller.signal,
+        (err) => {
+          inFlight.delete(tracked);
+          if (firstError === null) firstError = err;
+          controller.abort();
+        },
       );
-      partLoaded[idx] = task.contentLength;
-      report();
-      return { partNumber: task.partNumber, etag: result.etag };
-    });
+      inFlight.add(tracked);
+
+      if (inFlight.size >= PARALLELISM) {
+        await Promise.race(inFlight); // wait for a slot (never rejects - tracked catches)
+      }
+    }
+
+    await Promise.allSettled(inFlight);
+    if (firstError) throw firstError;
+    if (controller.signal.aborted) throw new DOMException("aborted", "AbortError");
 
     report(true); // ensure a final 100% emit
 
-    const completeParts: CompleteMultipartUploadPart[] = results;
     const completed = await api.completeMultipartUpload({
       transferId,
       fileId,
       uploadId,
-      parts: completeParts,
+      parts: results,
     });
     return completed;
   } catch (err) {
     controller.abort();
+    await reader.cancel().catch(() => {});
     // Best-effort; the R2 lifecycle rule sweeps any orphans within 7d.
     try {
       await api.abortMultipartUpload({ transferId, fileId, uploadId });
