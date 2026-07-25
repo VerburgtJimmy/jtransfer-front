@@ -22,7 +22,7 @@
   comparison={c}
   locale="nl"
   basePath="/nl/vergelijken"
-  homePath="/"
+  homePath="/nl"
   {others}
   lastVerified={LAST_VERIFIED_NL}
   ctaPrimaryHref="/"
