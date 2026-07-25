@@ -221,19 +221,41 @@
           </section>
 
           <section class="space-y-3">
-            <h2 class="text-xl font-semibold text-foreground">7. Third-Party Services</h2>
-            <p class="text-muted-foreground">We use the following third-party services:</p>
+            <h2 class="text-xl font-semibold text-foreground">7. Processors and Where Data Is Held</h2>
+            <p class="text-muted-foreground">
+              These are every third party that processes data on our behalf, what each one
+              receives, and where it sits.
+            </p>
             <ul class="list-disc list-inside text-muted-foreground space-y-1 ml-4">
-              <li><strong>Cloudflare:</strong> CDN, DDoS protection, and R2 object storage (EU region)</li>
               <li>
-                <strong>Scaleway Transactional Email (TEM):</strong> Sends one-time sign-in links and
-                account-related notifications. Receives your email address and the message contents. EU-based
-                processor; used for transactional mail only - never marketing.
+                <strong>Hetzner (Germany):</strong> Runs the application server and its logs.
+                Sees requests to the service. EU company, EU data centre.
+              </li>
+              <li>
+                <strong>Scaleway Managed PostgreSQL (Amsterdam, Netherlands):</strong>
+                The database holding account records, sessions, and transfer metadata. EU company,
+                EU data centre.
+              </li>
+              <li>
+                <strong>Scaleway Transactional Email (France):</strong> Sends one-time sign-in
+                links and account notifications. Receives your email address and the message
+                contents. Transactional mail only, never marketing.
+              </li>
+              <li>
+                <strong>Cloudflare:</strong> Encrypted file storage (R2, restricted to the EU
+                jurisdiction so objects stay in EU data centres), plus CDN and DDoS protection in
+                front of the site. R2 only ever holds ciphertext. Because Cloudflare terminates
+                TLS at its edge, it can see request metadata and your session cookie, but never
+                your decryption key, which stays in the link fragment and is never transmitted.
               </li>
             </ul>
             <p class="text-muted-foreground">
-              These services may process personal data as part of their normal operations.
-              Please refer to their respective privacy policies for more information.
+              Cloudflare Inc. is headquartered in the United States, so we do not claim to be
+              beyond the reach of US law. We claim something narrower: your file contents are
+              encrypted in your browser before upload and the key never reaches any server, ours
+              or Cloudflare's. A legal order served on Cloudflare produces encrypted data and
+              metadata, not your files. This transfer relies on Cloudflare's standard data
+              processing terms and its EU data localisation options.
             </p>
           </section>
 
