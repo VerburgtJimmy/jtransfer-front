@@ -1,32 +1,16 @@
 <script lang="ts">
   import { cn } from "$lib/utils";
-
-  type Step = { action: string; transparency: string };
-
-  const steps: Step[] = [
-    {
-      action: "You drop a file.",
-      transparency: "We never know what it's called.",
-    },
-    {
-      action: "Your browser encrypts it.",
-      transparency: "We never have the key.",
-    },
-    {
-      action: "We store ciphertext.",
-      transparency: "We can't read it. Not for police, not for ourselves.",
-    },
-    {
-      action: "The recipient decrypts in their browser.",
-      transparency: "The key never reaches our server.",
-    },
-  ];
+  import { howItWorksStrings } from "$lib/i18n/messages";
+  import type { Locale } from "$lib/i18n/locale";
 
   type Props = {
     class?: string;
+    locale?: Locale;
   };
 
-  let { class: className = "" }: Props = $props();
+  let { class: className = "", locale = "en" }: Props = $props();
+
+  const t = $derived(howItWorksStrings[locale]);
 </script>
 
 <section
@@ -37,11 +21,11 @@
   aria-labelledby="how-it-works-title"
 >
   <h2 id="how-it-works-title" class="text-base font-semibold text-foreground">
-    How it works
+    {t.heading}
   </h2>
 
   <ol class="space-y-5">
-    {#each steps as step, i (i)}
+    {#each t.steps as step, i (i)}
       <li class="flex gap-4">
         <span
           class="flex-shrink-0 inline-flex items-center justify-center size-7 rounded-full bg-primary/10 text-primary text-sm font-semibold tabular-nums"

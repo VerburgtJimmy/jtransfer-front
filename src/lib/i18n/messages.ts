@@ -7,6 +7,44 @@
 
 import type { Locale } from "./locale";
 
+export interface HowItWorksStrings {
+  heading: string;
+  steps: { action: string; transparency: string }[];
+}
+
+export const howItWorksStrings: Record<Locale, HowItWorksStrings> = {
+  en: {
+    heading: "How it works",
+    steps: [
+      { action: "You drop a file.", transparency: "We never know what it's called." },
+      { action: "Your browser encrypts it.", transparency: "We never have the key." },
+      {
+        action: "We store ciphertext.",
+        transparency: "We can't read it. Not for police, not for ourselves.",
+      },
+      {
+        action: "The recipient decrypts in their browser.",
+        transparency: "The key never reaches our server.",
+      },
+    ],
+  },
+  nl: {
+    heading: "Hoe het werkt",
+    steps: [
+      { action: "Je sleept een bestand naar de pagina.", transparency: "Wij weten nooit hoe het heet." },
+      { action: "Je browser versleutelt het.", transparency: "Wij krijgen de sleutel nooit." },
+      {
+        action: "Wij bewaren alleen versleutelde data.",
+        transparency: "Onleesbaar voor ons. Niet voor de politie, en niet voor onszelf.",
+      },
+      {
+        action: "De ontvanger ontsleutelt in zijn eigen browser.",
+        transparency: "De sleutel bereikt onze server nooit.",
+      },
+    ],
+  },
+};
+
 export interface CompareStrings {
   breadcrumbHome: string;
   breadcrumbCompare: string;

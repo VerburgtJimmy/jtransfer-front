@@ -610,7 +610,15 @@
   }
 </script>
 
-<Seo title={PAGE_TITLE} description={PAGE_DESCRIPTION} path="/" />
+<Seo
+  title={PAGE_TITLE}
+  description={PAGE_DESCRIPTION}
+  path="/"
+  alternates={[
+    { locale: "en", path: "/" },
+    { locale: "nl", path: "/nl" },
+  ]}
+/>
 
 <svelte:head>
   {@html `<script type="application/ld+json">${JSON.stringify(homeSchema).replace(/</g, "\\u003c")}</script>`}
